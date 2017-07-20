@@ -47,7 +47,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					layout: "force",
 					//color: "blue",
 					force: {
-						repulsion:2000
+						repulsion:250,
+						//gravity: 0  //引力
+                		edgeLength: 125
 					},
 					
 					data:[],
@@ -68,7 +70,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                	normal: {
 		                    show: true,
 		                    textStyle: {
-		                        fontSize: 18
+		                        fontSize: 10
 			                },
 			             //   position: "end",
 		                    formatter: "{c}"
@@ -78,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						normal: {
 							show: true,
 							textStyle: {
-		                        fontSize: 18,
+		                        fontSize: 10,
 		                        color: "black"
 		                    },
 						}
@@ -114,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						temp1={
 								category:1,
 								name:input_str,
-								symbolSize:125,
+								symbolSize:60,
 								itemStyle: {
 							        normal: {
 							      //      color: 'yellow'
@@ -124,15 +126,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						res_node.push(temp1);
 						
 						
-						for(var i=0;i<result.length/* &&i<=12 */;i++){
+						for(var i=1;i<result.length/* &&i<=12 */;i++){//忽略第一个triple
 						
 							if(result[i].o==result[i].s)
 								continue;
-							
+							if(result[i].o.length>25||result[i].s.length>25)
+								continue;
 							temp1={
 								category:1,
 								name:result[i].o,
-								symbolSize:75,
+								symbolSize:50,
 								//value:result[i].value,
 								//symbolSize:Math.sqrt(Math.sqrt(Math.sqrt(result[i].value/maxSize*10000)*25)*144),
 								draggable:true,
