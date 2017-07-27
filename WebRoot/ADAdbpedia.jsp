@@ -38,7 +38,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					top: "top",
 					left: "center"
 				},
-				
+				legend: [{//727
+			        formatter: function(name) {
+			            return echarts.format.truncateText(name, 200, '14px Microsoft Yahei', '…');
+			        },
+			        tooltip: {
+			            show: true
+			        },
+			       // itemGap:200,
+			        width:120,
+			        selectedMode: 'false',
+			        //bottom: 20,
+			        left:20,
+			        data: []
+			    }],
 				tooltip:{},
 				
 				series: [{
@@ -51,6 +64,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						//gravity: 0  //引力
                 		edgeLength: 125
 					},
+					
+					categories:[],
 					
 					data:[],
 					links:[],
@@ -69,8 +84,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					edgeLabel: {
 	                	normal: {
 		                    show: true,
+		                    color: 'blue',
 		                    textStyle: {
 		                        fontSize: 10
+		                        
 			                },
 			             //   position: "end",
 		                    formatter: "{c}"
@@ -88,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					
 					lineStyle: {
 						normal: {
-							//color: "blue",
+							color: "source",
 							curveness: 0,
 							width: 3,
 							type: "solid"
@@ -101,8 +118,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			var temp1={};
 			var temp2={};
+			var temp3={};//727
 			var res_node=[];
 			var res_link=[];
+			var res_cat=[];
+			var res_legend=[];
+			
 			var input_str=document.getElementById("myinput").value;
 			$.ajax({
 				type: "post",
@@ -114,9 +135,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					if(result != null && result.length > 0){
 						
 						temp1={
-								category:1,
+							//	category:input_str,//727
 								name:input_str,
-								symbolSize:60,
+								symbolSize:75,
 								itemStyle: {
 							        normal: {
 							      //      color: 'yellow'
@@ -124,8 +145,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							    }
 						};
 						res_node.push(temp1);
+						temp3={
+							name:input_str
+						};
 						
-						
+						res_cat.push(temp3);
+						res_legend.push(input_str);
+												
 						for(var i=1;i<result.length/* &&i<=12 */;i++){//忽略第一个triple
 						
 							if(result[i].o==result[i].s)
@@ -133,7 +159,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							if(result[i].o.length>25||result[i].s.length>25)
 								continue;
 							temp1={
-								category:1,
+								category:result[i].s,//727
 								name:result[i].o,
 								symbolSize:50,
 								//value:result[i].value,
@@ -152,9 +178,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								value: result[i].p
 							};
 							
+							if(result[i].p==="ment2ent"){//727
+							
+								temp1.category=result[i].o;
+								temp1.symbolSize=75;
+								res_legend.push(result[i].o);
+								
+								temp3={
+									name:result[i].o
+								};
+							}
+							
 							res_node.push(temp1);
 							res_link.push(temp2);
-							
+							res_cat.push(temp3);
 						}
 						myChart.hideLoading();
 						myChart.setOption({
@@ -162,9 +199,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							series:[{
 								links:res_link,
 								data:res_node,
+								categories:res_cat
 								//roam: true
 								}
-							]
+							],
+							
+							legend:[{//727
+								data:res_legend
+							}]
 							
 						});
 					}

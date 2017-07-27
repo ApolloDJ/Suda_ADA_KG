@@ -117,9 +117,10 @@ public class MongoServlet extends HttpServlet {
 			   temp.setO(str);
 			   
 			   str=t.get("p").toString();
-			   if(str.equals("CATEGORY_ZH")){
-				   str="是";
-			   }
+			   if(str.equals("CATEGORY_ZH"))
+				   continue;
+				//   str="是";
+			   
 			   
 			   temp.setP(str);
 			   temp.setS(t.get("s").toString());
